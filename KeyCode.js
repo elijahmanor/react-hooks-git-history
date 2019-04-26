@@ -2,20 +2,16 @@ import React, { Component, Fragment } from "react";
 import KeyCodeBlock from "./KeyCodeBlock";
 
 export default class KeyCode extends Component {
-  constructor() {
-    super();
-    this.state = { key: "", keyCode: "", code: "" };
-    this.handleKey = this.handleKey.bind(this);
-  }
+  state = { key: "", keyCode: "", code: "" };
   componentDidMount() {
     document.addEventListener("keydown", this.handleKey);
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKey);
   }
-  handleKey(e) {
+  handleKey = e => {
     this.setState({ keyCode: e.which, key: e.key, code: e.code });
-  }
+  };
   render() {
     const { keyCode, key, code } = this.state;
     return (

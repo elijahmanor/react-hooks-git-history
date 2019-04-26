@@ -1,31 +1,27 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import KeyCodeBlock from "./KeyCodeBlock";
 
-export default class KeyCode extends Component {
-  state = { key: "", keyCode: "", code: "" };
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleKey);
-  }
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKey);
-  }
-  handleKey = e => {
-    this.setState({ keyCode: e.which, key: e.key, code: e.code });
-  };
-  render() {
-    const { keyCode, key, code } = this.state;
-    return (
-      <main className="KeyCode">
-        {keyCode ? (
-          <Fragment>
-            <KeyCodeBlock header="keyCode" code={keyCode} />
-            <KeyCodeBlock header="key" code={key} />
-            <KeyCodeBlock header="code" code={code} />
-          </Fragment>
-        ) : (
-          <h1>Press Any Key</h1>
-        )}
-      </main>
-    );
-  }
+export default function KeyCode() {
+  const [{ keyCode, key, code }, setCodes] = useState({});
+
+  useEffect(() => {
+    const handleKey = ({ keyCode, key, code }) =>
+      setCodes({ keyCode, key, code });
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, []);
+
+  return (
+    <main className="KeyCode">
+      {keyCode ? (
+        <Fragment>
+          <KeyCodeBlock header="keyCode" code={keyCode} />
+          <KeyCodeBlock header="key" code={key} />
+          <KeyCodeBlock header="code" code={code} />
+        </Fragment>
+      ) : (
+        <h1>Press Any Key</h1>
+      )}
+    </main>
+  );
 }
